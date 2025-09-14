@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: java21
+    Environment:
+      Variables:
+        BUCKET_NAME: kev-garbage-bin
+
+Resources:
+  CreateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: build/libs/S3CrudOperations-all.jar
+      Handler: com.example.lambda.CreateUserHandler::handleRequest
+      Events:
+        CreateUser:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: post
+
+  GetUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: build/libs/S3CrudOperations-all.jar
+      Handler: com.example.lambda.GetUserHandler::handleRequest
+      Events:
+        GetUser:
+          Type: Api
+          Properties:
+            Path: /users/{userId}
+            Method: get
+
+  DeleteUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: build/libs/S3CrudOperations-all.jar
+      Handler: com.example.lambda.DeleteUserHandler::handleRequest
+      Events:
+        DeleteUser:
+          Type: Api
+          Properties:
+            Path: /users/{userId}
+            Method: delete
+
+Outputs:
+  ApiGatewayEndpoint:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
