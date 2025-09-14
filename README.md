@@ -97,3 +97,52 @@ src/main/java/com/example/
    # Delete user
    curl -X DELETE http://127.0.0.1:3000/users/456
    ```
+
+## Deploy to AWS
+
+### Build and Deploy
+
+1. **Build and deploy to AWS:**
+   ```bash
+   # Build SAM application
+   sam build
+   
+   # Deploy (first time - guided)
+   sam deploy --guided
+   
+   # Subsequent deployments
+   sam deploy
+   ```
+
+2. **Get API endpoint:**
+   ```bash
+   sam list endpoints --stack-name <your-stack-name> --output table
+   ```
+
+### Test Against Deployed Stack
+
+```bash
+# Replace <API_ENDPOINT> with your actual endpoint
+API_ENDPOINT="https://your-api-id.execute-api.region.amazonaws.com/Prod"
+
+# Create user
+curl -X POST $API_ENDPOINT/users \
+  -H "Content-Type: application/json" \
+  -d '{"id":"789","name":"Cloud User","email":"cloud@example.com"}'
+
+# Get user
+curl $API_ENDPOINT/users/789
+
+# Delete user
+curl -X DELETE $API_ENDPOINT/users/789
+```
+
+### Monitor and Clean Up
+
+```bash
+# Monitor logs
+sam logs -n CreateUserFunction --stack-name <your-stack-name> --tail
+
+# Clean up resources
+sam delete --stack-name <your-stack-name>
+```

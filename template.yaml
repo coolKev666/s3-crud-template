@@ -13,8 +13,13 @@ Resources:
   CreateUserFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: build/libs/S3CrudOperations-all.jar
+      CodeUri: .
       Handler: com.example.lambda.CreateUserHandler::handleRequest
+      Policies:
+        - S3ReadPolicy:
+            BucketName: kev-garbage-bin
+        - S3WritePolicy:
+            BucketName: kev-garbage-bin
       Events:
         CreateUser:
           Type: Api
@@ -25,8 +30,11 @@ Resources:
   GetUserFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: build/libs/S3CrudOperations-all.jar
+      CodeUri: .
       Handler: com.example.lambda.GetUserHandler::handleRequest
+      Policies:
+        - S3ReadPolicy:
+            BucketName: kev-garbage-bin
       Events:
         GetUser:
           Type: Api
@@ -37,8 +45,13 @@ Resources:
   DeleteUserFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: build/libs/S3CrudOperations-all.jar
+      CodeUri: .
       Handler: com.example.lambda.DeleteUserHandler::handleRequest
+      Policies:
+        - S3ReadPolicy:
+            BucketName: kev-garbage-bin
+        - S3WritePolicy:
+            BucketName: kev-garbage-bin
       Events:
         DeleteUser:
           Type: Api
